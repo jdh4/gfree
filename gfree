@@ -1,0 +1,156 @@
+#!/bin/bash
+
+spaces=" "
+padding() {
+    if [ $1 -eq 3 ]; then
+        spaces="     "
+    elif [ $1 -eq 4 ]; then
+        spaces="    "
+    elif [ $1 -eq 5 ]; then
+        spaces="   "
+    elif [ $1 -eq 6 ]; then
+        spaces="  "
+    else
+        spaces=" "
+    fi
+}
+
+if [[ $(hostname) == della* ]]; then
+
+    echo ""
+    echo "---------------------------------------------------------------------------------------------"
+    echo "    GPU Model       Free/Total   Cores/GPU   CPU-Mem/GPU   Slurm Directive"
+    echo "---------------------------------------------------------------------------------------------"
+
+    printf "80 GB A100            "
+    nums=$(shownodes -p gpu | grep della- | grep gpu80 | grep -v -E "drain|down|boot" | awk '{print $6}' | awk -F/ '{free+=$1; total+=$2} END {print free "/" total}' | tr -d '\n')
+    padding ${#nums}
+    echo "$nums  $spaces    12         240 GB      #SBATCH --constraint=gpu80"
+
+    printf "40 GB A100            "
+    nums=$(shownodes -p gpu | grep della- | grep gpu40 | grep nomig | grep -v -E "drain|down|boot" | awk '{print $6}' | awk -F/ '{free+=$1; total+=$2} END {print free "/" total}' | tr -d '\n')
+    padding ${#nums}
+    echo "$nums  $spaces    64         360 GB      #SBATCH --constraint=\"nomig&gpu40\""
+
+    printf "40 GB MIG A100        "
+    nums=$(shownodes -p gpu | grep della- | grep gpu40 | grep -v nomig | grep -v -E "drain|down|boot" | awk '{print $6}' | awk -F/ '{free+=$1; total+=$2} END {print free "/" total}' | tr -d '\n')
+    padding ${#nums}
+    echo "$nums  $spaces     6         120 GB      #SBATCH --constraint=\"intel&gpu40\""
+
+    printf "10 GB MIG A100        "
+    nums=$(shownodes -p mig | grep della- | grep -v -E "drain|down|boot" | awk '{print $6}' | awk -F/ '{free+=$1; total+=$2} END {print free "/" total}' | tr -d '\n')
+    padding ${#nums}
+    echo "$nums  $spaces     1          32 GB      #SBATCH --constraint=mig"
+
+    printf "96 GB Grace Hopper    "
+    nums=$(shownodes -p grace | grep della- | grep -v -E "drain|down|boot" | awk '{print $6}' | awk -F/ '{free+=$1; total+=$2} END {print free "/" total}' | tr -d '\n')
+    padding ${#nums}
+    echo "$nums  $spaces    72         525 GB      #SBATCH --partition=grace"
+
+    printf "80 GB H100 (pli)      "
+    nums=$(shownodes -p pli-c | grep della- | grep -v -E "drain|down|boot" | awk '{print $6}' | awk -F/ '{free+=$1; total+=$2} END {print free "/" total}' | tr -d '\n')
+    padding ${#nums}
+    echo "$nums  $spaces    12         120 GB      (restricted access)"
+
+    printf "80 GB A100 (cryoem)   "
+    nums=$(shownodes -p cryoem | grep della- | grep a100 | grep -v -E "drain|down|boot" | awk '{print $6}' | awk -F/ '{free+=$1; total+=$2} END {print free "/" total}' | tr -d '\n')
+    padding ${#nums}
+    echo "$nums  $spaces    12         240 GB      (restricted access)"
+
+    printf "32 GB V100 (cryoem)   "
+    nums=$(shownodes -p cryoem | grep della- | grep v100 | grep -v -E "drain|down|boot" | awk '{print $6}' | awk -F/ '{free+=$1; total+=$2} END {print free "/" total}' | tr -d '\n')
+    padding ${#nums}
+    echo "$nums  $spaces    14         190 GB      (restricted access)"
+
+    echo -e "\nPlease request the smallest set of hardware resources for a given job. That is,"
+    echo -e "choose the least powerful GPU model, the smallest number of CPU-cores, and the"
+    echo -e "least amount of CPU memory that is sufficient to carry out the job. The values of"
+    echo -e '"Cores/GPU" and "CPU-Mem/GPU" are soft limits so choices lower or higher are'
+    echo -e "possible."
+
+    echo -e "\nMore info: https://researchcomputing.princeton.edu/systems/della#GPU-Jobs\n"
+
+elif [[ $(hostname) == adroit* ]]; then
+
+    echo ""
+    echo "--------------------------------------------------------------------------------------"
+    echo "  GPU Model     Free/Total   Cores/GPU   CPU-Mem/GPU   Slurm Directive"
+    echo "--------------------------------------------------------------------------------------"
+
+    printf "80 GB A100         "
+    nums=$(shownodes -p gpu | grep adroit- | grep gpu80 | grep -v -E "drain|down|boot" | awk '{print $6}' | awk -F/ '{free+=$1; total+=$2} END {print free "/" total}' | tr -d '\n')
+    padding ${#nums}
+    echo "$nums  $spaces   12         240 GB      #SBATCH --constraint=gpu80"
+
+    printf "20 GB MIG A100     "
+    nums=$(shownodes -p gpu | grep adroit- | grep a100 | grep -v gpu80 | grep -v -E "drain|down|boot" | awk '{print $6}' | awk -F/ '{free+=$1; total+=$2} END {print free "/" total}' | tr -d '\n')
+    padding ${#nums}
+    echo "$nums  $spaces    6         120 GB      #SBATCH --nodelist=adroit-h11g2"
+
+    printf "32 GB V100         "
+    nums=$(shownodes -p gpu | grep adroit- | grep v100 | grep -v -E "drain|down|boot" | awk '{print $6}' | awk -F/ '{free+=$1; total+=$2} END {print free "/" total}' | tr -d '\n')
+    padding ${#nums}
+    echo "$nums  $spaces   14         180 GB      #SBATCH --constraint=v100"
+
+    echo -e "\nPlease request the smallest set of hardware resources for a given job. That is,"
+    echo -e "choose the least powerful GPU model, the smallest number of CPU-cores, and the"
+    echo -e "least amount of CPU memory that is sufficient to carry out the job. The values of"
+    echo -e '"Cores/GPU" and "CPU-Mem/GPU" are soft limits so choices lower or higher are'
+    echo -e "possible."
+
+    echo -e "\nMore info: https://researchcomputing.princeton.edu/systems/adroit#Running-GPU-Jobs\n"
+
+elif [[ $(hostname) == stellar* ]]; then
+
+    echo ""
+    echo "----------------------------------------------------------------------------------------"
+    echo " GPU Model    Free/Total   Cores/GPU   CPU-Mem/GPU   Slurm Directive"
+    echo "----------------------------------------------------------------------------------------"
+
+    printf "40 GB A100      "
+    nums=$(shownodes -p gpu | grep stellar- | grep -v stellar-k09g1 | grep -v -E "drain|down|boot" | awk '{print $6}' | awk -F/ '{free+=$1; total+=$2} END {print free "/" total}' | tr -d '\n')
+    padding ${#nums}
+    echo "$nums  $spaces    64         240 GB      #SBATCH --gres=gpu:N  (1 <= N <= 2)"
+
+    printf "40 GB A100       "
+    nums=$(shownodes -p gpu | grep stellar-k09g1 | grep -v -E "drain|down|boot" | awk '{print $6}' | awk -F/ '{free+=$1; total+=$2} END {print free "/" total}' | tr -d '\n')
+    padding ${#nums}
+    echo "$nums  $spaces   14         120 GB      #SBATCH --gres=gpu:N  (1 <= N <= 8)"
+
+    echo -e "\nPlease request the smallest set of hardware resources for a given job. That is,"
+    echo -e "choose the smallest number of CPU-cores and the least amount of CPU memory that"
+    echo -e 'is sufficient to carry out the job. The values of "Cores/GPU" and "CPU-Mem/GPU"'
+    echo -e "are soft limits so choices lower or higher are possible."
+
+    echo -e "\nMore info: https://researchcomputing.princeton.edu/systems/stellar\n"
+
+elif [[ $(hostname) == tiger* ]]; then
+
+    echo ""
+    echo "-----------------------------------------------------------------------------------------"
+    echo " GPU Model    Free/Total   Cores/GPU   CPU-Mem/GPU   Slurm Directive"
+    echo "-----------------------------------------------------------------------------------------"
+
+    printf " 80 GB H100     "
+    nums=$(shownodes -p gpu | grep tiger- | grep -v -E "drain|down|boot" | awk '{print $6}' | awk -F/ '{free+=$1; total+=$2} END {print free "/" total}' | tr -d '\n')
+    padding ${#nums}
+    echo "$nums  $spaces     28         240 GB     (restricted access to select groups)"
+
+    printf "141 GB H200      "
+    nums=$(shownodes -p cimes | grep tiger- | grep h200 | grep -v -E "drain|down|boot" | awk '{print $6}' | awk -F/ '{free+=$1; total+=$2} END {print free "/" total}' | tr -d '\n')
+    padding ${#nums}
+    echo "$nums  $spaces    14         120 GB     (restricted access to cimes)"
+
+    printf " 48 GB L40S     "
+    nums=$(shownodes -p cimes | grep tiger- | grep l40s | grep -v -E "drain|down|boot" | awk '{print $6}' | awk -F/ '{free+=$1; total+=$2} END {print free "/" total}' | tr -d '\n')
+    padding ${#nums}
+    echo "$nums  $spaces    112        1000 GB     (restricted access to cimes)"
+
+    echo -e "\nPlease request the smallest set of hardware resources for a given job. That is,"
+    echo -e "choose the smallest number of CPU-cores and the least amount of CPU memory that"
+    echo -e 'is sufficient to carry out the job. The values of "Cores/GPU" and "CPU-Mem/GPU"'
+    echo -e "are soft limits so choices lower or higher are possible."
+
+    echo -e "\nMore info: https://researchcomputing.princeton.edu/systems/tiger#GPU-Jobs\n"
+
+fi
