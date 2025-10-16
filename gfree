@@ -52,15 +52,15 @@ if [[ $(hostname) == della* ]]; then
     padding ${#nums}
     echo "$nums  $spaces    12         120 GB      (restricted access)"
 
+    printf "80 GB H100 (cryoem)   "
+    nums=$(shownodes -p cryoem | grep della- | grep h100 | grep -v -E "drain|down|boot" | awk '{print $6}' | awk -F/ '{free+=$1; total+=$2} END {print free "/" total}' | tr -d '\n')
+    padding ${#nums}
+    echo "$nums  $spaces    16         240 GB      (restricted access)"
+
     printf "80 GB A100 (cryoem)   "
     nums=$(shownodes -p cryoem | grep della- | grep a100 | grep -v -E "drain|down|boot" | awk '{print $6}' | awk -F/ '{free+=$1; total+=$2} END {print free "/" total}' | tr -d '\n')
     padding ${#nums}
     echo "$nums  $spaces    12         240 GB      (restricted access)"
-
-    printf "32 GB V100 (cryoem)   "
-    nums=$(shownodes -p cryoem | grep della- | grep v100 | grep -v -E "drain|down|boot" | awk '{print $6}' | awk -F/ '{free+=$1; total+=$2} END {print free "/" total}' | tr -d '\n')
-    padding ${#nums}
-    echo "$nums  $spaces    14         190 GB      (restricted access)"
 
     echo -e "\nPlease request the smallest set of hardware resources for a given job. That is,"
     echo -e "choose the least powerful GPU model, the smallest number of CPU-cores, and the"
