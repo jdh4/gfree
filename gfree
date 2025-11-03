@@ -22,42 +22,47 @@ if [[ $(hostname) == della* ]]; then
     echo "    GPU Model       Free/Total   Cores/GPU   CPU-Mem/GPU   Slurm Directive"
     echo "---------------------------------------------------------------------------------------------"
 
-    printf "80 GB A100            "
+    printf " 80 GB A100            "
     nums=$(shownodes -p gpu | grep della- | grep gpu80 | grep -v -E "drain|down|boot" | awk '{print $6}' | awk -F/ '{free+=$1; total+=$2} END {print free "/" total}' | tr -d '\n')
     padding ${#nums}
     echo "$nums  $spaces    12         240 GB      #SBATCH --constraint=gpu80"
 
-    printf "40 GB A100            "
+    printf " 40 GB A100            "
     nums=$(shownodes -p gpu | grep della- | grep gpu40 | grep nomig | grep -v -E "drain|down|boot" | awk '{print $6}' | awk -F/ '{free+=$1; total+=$2} END {print free "/" total}' | tr -d '\n')
     padding ${#nums}
     echo "$nums  $spaces    64         360 GB      #SBATCH --constraint=\"nomig&gpu40\""
 
-    printf "40 GB MIG A100        "
+    printf " 40 GB MIG A100        "
     nums=$(shownodes -p gpu | grep della- | grep gpu40 | grep -v nomig | grep -v -E "drain|down|boot" | awk '{print $6}' | awk -F/ '{free+=$1; total+=$2} END {print free "/" total}' | tr -d '\n')
     padding ${#nums}
     echo "$nums  $spaces     6         120 GB      #SBATCH --constraint=\"intel&gpu40\""
 
-    printf "10 GB MIG A100        "
+    printf " 10 GB MIG A100        "
     nums=$(shownodes -p mig | grep della- | grep -v -E "drain|down|boot" | awk '{print $6}' | awk -F/ '{free+=$1; total+=$2} END {print free "/" total}' | tr -d '\n')
     padding ${#nums}
     echo "$nums  $spaces     1          32 GB      #SBATCH --constraint=mig"
 
-    printf "96 GB Grace Hopper    "
+    printf " 96 GB Grace Hopper    "
     nums=$(shownodes -p grace | grep della- | grep -v -E "drain|down|boot" | awk '{print $6}' | awk -F/ '{free+=$1; total+=$2} END {print free "/" total}' | tr -d '\n')
     padding ${#nums}
     echo "$nums  $spaces    72         525 GB      #SBATCH --partition=grace"
 
-    printf "80 GB H100 (pli)      "
+    printf "141 GB H200 (ailab)    "
+    nums=$(shownodes -p ailab | grep della- | grep -v -E "drain|down|boot" | awk '{print $6}' | awk -F/ '{free+=$1; total+=$2} END {print free "/" total}' | tr -d '\n')
+    padding ${#nums}
+    echo "$nums  $spaces     8         180 GB      (restricted access)"
+
+    printf " 80 GB H100 (pli)      "
     nums=$(shownodes -p pli-c | grep della- | grep -v -E "drain|down|boot" | awk '{print $6}' | awk -F/ '{free+=$1; total+=$2} END {print free "/" total}' | tr -d '\n')
     padding ${#nums}
     echo "$nums  $spaces    12         120 GB      (restricted access)"
 
-    printf "80 GB H100 (cryoem)   "
+    printf " 80 GB H100 (cryoem)   "
     nums=$(shownodes -p cryoem | grep della- | grep h100 | grep -v -E "drain|down|boot" | awk '{print $6}' | awk -F/ '{free+=$1; total+=$2} END {print free "/" total}' | tr -d '\n')
     padding ${#nums}
-    echo "$nums  $spaces    16         240 GB      (restricted access)"
+    echo "$nums  $spaces    16         120 GB      (restricted access)"
 
-    printf "80 GB A100 (cryoem)   "
+    printf " 80 GB A100 (cryoem)   "
     nums=$(shownodes -p cryoem | grep della- | grep a100 | grep -v -E "drain|down|boot" | awk '{print $6}' | awk -F/ '{free+=$1; total+=$2} END {print free "/" total}' | tr -d '\n')
     padding ${#nums}
     echo "$nums  $spaces    12         240 GB      (restricted access)"
