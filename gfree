@@ -50,7 +50,7 @@ if [[ $(hostname) == della* ]]; then
     printf "141 GB H200 (ailab)    "
     nums=$(shownodes -p ailab | grep della- | grep -v -E "drain|down|boot" | awk '{print $6}' | awk -F/ '{free+=$1; total+=$2} END {print free "/" total}' | tr -d '\n')
     padding ${#nums}
-    echo "$nums  $spaces     8         180 GB      (restricted access)"
+    echo "$nums  $spaces     8         185 GB      (restricted access)"
 
     printf " 80 GB H100 (pli)      "
     nums=$(shownodes -p pli-c | grep della- | grep -v -E "drain|down|boot" | awk '{print $6}' | awk -F/ '{free+=$1; total+=$2} END {print free "/" total}' | tr -d '\n')
@@ -60,12 +60,12 @@ if [[ $(hostname) == della* ]]; then
     printf " 80 GB H100 (cryoem)   "
     nums=$(shownodes -p cryoem | grep della- | grep h100 | grep -v -E "drain|down|boot" | awk '{print $6}' | awk -F/ '{free+=$1; total+=$2} END {print free "/" total}' | tr -d '\n')
     padding ${#nums}
-    echo "$nums  $spaces    16         120 GB      (restricted access)"
+    echo "$nums  $spaces    16         245 GB      (restricted access)"
 
     printf " 80 GB A100 (cryoem)   "
     nums=$(shownodes -p cryoem | grep della- | grep a100 | grep -v -E "drain|down|boot" | awk '{print $6}' | awk -F/ '{free+=$1; total+=$2} END {print free "/" total}' | tr -d '\n')
     padding ${#nums}
-    echo "$nums  $spaces    12         240 GB      (restricted access)"
+    echo "$nums  $spaces    12         245 GB      (restricted access)"
 
     echo -e "\nPlease request the smallest set of hardware resources for a given job. That is,"
     echo -e "choose the least powerful GPU model, the smallest number of CPU-cores, and the"
