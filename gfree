@@ -18,9 +18,9 @@ padding() {
 if [[ $(hostname) == della* ]]; then
 
     echo ""
-    echo "---------------------------------------------------------------------------------------------"
+    echo "──────────────────────────────────────────────────────────────────────────────────────────────"
     echo "    GPU Model       Free/Total   Cores/GPU   CPU-Mem/GPU   Slurm Directive"
-    echo "---------------------------------------------------------------------------------------------"
+    echo "──────────────────────────────────────────────────────────────────────────────────────────────"
 
     printf " 80 GB A100            "
     nums=$(shownodes -p gpu | grep della- | grep gpu80 | grep -v -E "drain|down|boot|planned|reserved" | awk '{print $6}' | awk -F/ '{free+=$1; total+=$2} END {print free "/" total}' | tr -d '\n')
@@ -83,9 +83,9 @@ if [[ $(hostname) == della* ]]; then
 elif [[ $(hostname) == adroit* ]]; then
 
     echo ""
-    echo "--------------------------------------------------------------------------------------"
+    echo "──────────────────────────────────────────────────────────────────────────────────────"
     echo "  GPU Model     Free/Total   Cores/GPU   CPU-Mem/GPU   Slurm Directive"
-    echo "--------------------------------------------------------------------------------------"
+    echo "──────────────────────────────────────────────────────────────────────────────────────"
 
     printf "80 GB A100         "
     nums=$(shownodes -p gpu | grep adroit- | grep gpu80 | grep -v -E "drain|down|boot|planned|reserved" | awk '{print $6}' | awk -F/ '{free+=$1; total+=$2} END {print free "/" total}' | tr -d '\n')
@@ -113,9 +113,9 @@ elif [[ $(hostname) == adroit* ]]; then
 elif [[ $(hostname) == stellar* ]]; then
 
     echo ""
-    echo "----------------------------------------------------------------------------------------"
+    echo "────────────────────────────────────────────────────────────────────────────────────────"
     echo " GPU Model    Free/Total   Cores/GPU   CPU-Mem/GPU   Slurm Directive"
-    echo "----------------------------------------------------------------------------------------"
+    echo "────────────────────────────────────────────────────────────────────────────────────────"
 
     printf "40 GB A100      "
     nums=$(shownodes -p gpu | grep stellar- | grep -v stellar-k09g1 | grep -v -E "drain|down|boot|planned|reserved" | awk '{print $6}' | awk -F/ '{free+=$1; total+=$2} END {print free "/" total}' | tr -d '\n')
@@ -137,9 +137,9 @@ elif [[ $(hostname) == stellar* ]]; then
 elif [[ $(hostname) == tiger* ]]; then
 
     echo ""
-    echo "-----------------------------------------------------------------------------------------"
+    echo "─────────────────────────────────────────────────────────────────────────────────────────"
     echo " GPU Model    Free/Total   Cores/GPU   CPU-Mem/GPU   Slurm Directive"
-    echo "-----------------------------------------------------------------------------------------"
+    echo "─────────────────────────────────────────────────────────────────────────────────────────"
 
     printf " 80 GB H100     "
     nums=$(shownodes -p gpu | grep tiger- | grep -v -E "drain|down|boot|planned|reserved" | awk '{print $6}' | awk -F/ '{free+=$1; total+=$2} END {print free "/" total}' | tr -d '\n')
